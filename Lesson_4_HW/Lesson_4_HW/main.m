@@ -10,85 +10,135 @@
 #import "CarModel.h"
 #import "Parameters.h"
 
-
-static NSString *const carColorKey = @"carColor";
-static NSString *const carPriceKey = @"carPrice";
-static NSString *const carModelNameKey = @"carModelName";
+static NSString *const cityNameKey      = @"cityName";
+static NSString *const carShopKey       = @"carShop";
+static NSString *const brandNameKey     = @"brandName";
+static NSString *const modelsKey        = @"models";
+static NSString *const carModelKey      = @"carModel";
 static NSString *const carParametersKey = @"carParameters";
+static NSString *const carColorKey      = @"carColor";
+static NSString *const carPriceKey      = @"carPrice";
 
-NSArray *carModels() {
-    
-    NSArray *toyotaModels = @[@"Camry", @"Prius", @"RAV4", @"Corolla", @"Land Cruiser"];
-    NSArray *porscheModels = @[@"Panamera", @"Cayman", @"Carrera", @"911 Turbo"];
-    NSArray *nissanModels = @[@"Qashqai", @"Sentra", @"GT-R", @"Juke", @"X-Trail"];
-    NSArray *mercedesModels = @[@"A-Class", @"B-Class", @"C-Class", @"S-Class", @"CLS"];
-    NSArray *hondaModels = @[@"Civic", @"Accord", @"CR-V", @"Pilot", @"Odyssey"];
-    NSArray *audiModels = @[@"R8", @"TT", @"A6", @"S7", @"Q2"];
-    NSArray *lexusModels = @[@"GS F", @"GS 200t", @"LS 460", @"LFA", @"CT 200h"];
-    
-    NSArray *carModelsByShops = @[toyotaModels, porscheModels, nissanModels, mercedesModels, hondaModels, audiModels, lexusModels];
-    
-    return carModelsByShops;
-    
-}
-NSDictionary *createParametersForModel() {
-    
-    NSArray *carColors = @[@"Black", @"White", @"Yellow",@"Red", @"Blue", @"Silver"];
-    
-    NSUInteger carPrice = (100 + (CGFloat)(arc4random() % 200)) * 100;
-    NSInteger randomColor = arc4random() % (carColors.count - 1);
-    NSString *color = [carColors objectAtIndex:randomColor];
-    
-    NSDictionary *colorAndPrice = @{carColorKey : color, carPriceKey : @(carPrice)};
-    
-    return colorAndPrice;
-}
-NSDictionary *createModelsForShop() {
-    
-    NSArray *carShops = @[@"Toyota", @"Porsche", @"Nissan", @"Mercedes", @"Honda", @"Audi", @"Lexus"];
-    
-    NSMutableDictionary *modelsForShop = [NSMutableDictionary dictionary];
-    
-    for (NSInteger i = 0; i < carModels().count; i++)
-    {
-        NSArray *carModelsArray = [carModels() objectAtIndex:i];
-        NSMutableArray *carModelsWithParameters = [NSMutableArray arrayWithArray:[carModelsArray mutableCopy]];
-        
-        for (NSInteger carModelIndex = 0; carModelIndex < carModelsWithParameters.count; carModelIndex++)
-        {
-            NSDictionary *carParameters = createParametersForModel();
-            NSString *carModelName = (NSString*)[carModelsWithParameters objectAtIndex:carModelIndex];
-            
-            NSDictionary *carModel = @{carModelNameKey : carModelName, carParametersKey : carParameters};
-            
-            [carModelsWithParameters replaceObjectAtIndex:carModelIndex withObject:carModel];
-        }
-        
-        [modelsForShop setObject:carModelsWithParameters forKey:[carShops objectAtIndex:i]];
-    }
-    
-    return modelsForShop;
-}
-NSDictionary* createShopsForCity() {
-    
-    NSArray *cityNames = @[@"Kiev", @"Kharkov", @"Lviv", @"Zaporozhye", @"Poltava", @"Vinnitsa", @"Sumy"];
-    
-    NSMutableDictionary *shopsForCity = [NSMutableDictionary dictionary];
-    
-    for (NSInteger i = 0; i < cityNames.count; i++)
-    {
-        [shopsForCity setObject:createModelsForShop() forKey:[cityNames objectAtIndex:i]];
-    }
-    
-//    NSLog(@"%@", shopsForCity);
-    return shopsForCity;
-    
-}
 int main(int argc, const char * argv[])
 {
     @autoreleasepool
     {
-        createModelsForShop();
+        // 1
+        NSArray *cityNames = @[@"Kharkiv", @"Kiyv", @"Vinnica", @"Uzhgorod", @"Summy", @"Dnipropetrovsk", @"Zhitomyr", @"Lviv"];
+        // 2
+        NSArray *carShops = @[@"Toyota", @"Nissan", @"Ford", @"Fiat", @"Honda", @"Dodge", @"Mazda"];
+        // 3
+        NSArray *colors = @[@"Red", @"Green", @"Blue", @"Yellow", @"Black", @"White"];
+        // 4
+        NSArray *toyotaModels = @[@"Camry", @"Carina", @"Corolla", @"Prius", @"Celica"];
+        NSArray *nissanModels = @[@"Almera", @"Tiida", @"Skyline", @"350-Z", @"Juke"];
+        
+        NSArray *fordModels = @[@"Fiesta", @"Focus", @"Mondeo", @"Galaxy", @"Ranger"];
+        NSArray *fiatModels = @[@"124 Spider", @"500", @"Panda Cross", @"Punto", @"Doblo"];
+        
+        NSArray *hondaModels = @[@"Accord", @"Civic", @"2000", @"Fit", @"Odyssey", @"Ridgeline"];
+        NSArray *dodgeModels = @[@"Charger", @"Durango", @"Dart", @"Viper", @"Challenger", @"Caliber"];
+        NSArray *mazdaModels = @[@"2", @"3", @"5", @"6", @"MX-5", @"CX-3", @"CX-5", @"CX-9"];
+        
+        // в дальнейшем нам понядобиться использовать циклы и будет удобно добавить все модели каждого бренда в томже порядке как carShops
+        // для сравнения: carShops = @[@"Toyota", @"Nissan", @"Ford", @"Fiat", @"Honda", @"Dodge", @"Mazda"];
+        NSArray *carModelsByShops = @[toyotaModels, nissanModels, fordModels, fiatModels, hondaModels, dodgeModels, mazdaModels];
+        
+        // Один из возможных авриантов пункта 5
+        NSMutableDictionary *kharkovAuto = [NSMutableDictionary dictionary];
+        
+        [kharkovAuto setObject:[NSArray arrayWithObjects:toyotaModels[1], toyotaModels[3], nil] forKey:(NSString*)carShops[0]];
+        [kharkovAuto setObject:[NSArray arrayWithObjects:nissanModels[0], toyotaModels[4], nil] forKey:(NSString*)carShops[1]];
+        
+        NSLog(@"Kharkov auto = %@", kharkovAuto);
+        
+        // 5.1 -- 5.3 используем циклы для заполнения городов, автосалонов, моделей...
+        
+        NSMutableArray *ukraineCitiesSet = [NSMutableArray array];
+        
+        // Первым циклом проходим по массиву городов
+        for (NSInteger cityIndex = 0; cityIndex < cityNames.count; cityIndex++)
+        {
+            // предварительно нужно сформировать данные по городам и автосалонам
+            
+            // для хранения магазинов текущего города нужно создать массив. Названия магазинов совпадают с названиями брендов авто (Toyota, Nissan, ...)
+            NSMutableArray *carShopsOfCurrentCity = [NSMutableArray array];
+            
+            // Затем создаем цикл для перебора автосалонов для текущего города
+            for (NSInteger carShopIndex = 0; carShopIndex < carShops.count; carShopIndex++)
+            {
+                // достаем название магазина (бренда)
+                NSString *carBrandName = [carShops objectAtIndex:carShopIndex];
+                
+                // для хранения списка случайных моделей со случайными параметрами нужен будет массив:
+                NSMutableArray *availableCarModels = [NSMutableArray array];
+                
+                // достаем список моделeй для текущего бренда
+                NSArray *currentBrandModels = [carModelsByShops objectAtIndex:carShopIndex];
+                
+                
+                // создаем NSMutableSet для хранения случайных индексов модели авто
+                NSMutableSet *indexes = [NSMutableSet set];
+                for (NSInteger carModelsIndex = 0; carModelsIndex < currentBrandModels.count; carModelsIndex++)
+                {
+                    [indexes addObject:@(arc4random() % (currentBrandModels.count - 1))];
+                }
+                
+                
+                // теперь у нас есть список доступных машин - он представяет собой массив, который содержит случайные индексы.
+                // По этим индексам будем доставать модели из списка всех моделей для текущего магазина/бренда
+                NSArray *availableCarModelsIndexes = [indexes allObjects];
+                
+                // проходим циклом по массиву со случайными индексами
+                for (NSInteger carModelsIndex = 0; carModelsIndex < availableCarModelsIndexes.count; carModelsIndex++)
+                {
+                    // достаем случайный индекс из массива
+                    // и используем случайное значение по индексу для генерации парметров и модели авто
+                    NSInteger index = [[availableCarModelsIndexes objectAtIndex:carModelsIndex] integerValue];
+                    
+                    // достаем название модели
+                    NSString *currentModelName = (NSString*)[currentBrandModels objectAtIndex:index];
+                    
+                    // далее создаем параметры для текущего авто
+                    
+                    // достаем случайны цвет по индексу из массива названий цветов
+                    NSInteger indexOfColor = arc4random() % (colors.count - 1);
+                    NSString *color = [colors objectAtIndex:indexOfColor];
+                    
+                    // создаем случайную цену от 10 до 30 тыс.
+                    NSInteger price = (100 + (CGFloat)(arc4random() % 200)) * 100;
+                    
+                    
+                    // создаем словарь с параметрами
+                    NSDictionary *carParameters = @{ carColorKey : color, carPriceKey : @(price) };
+                    
+                    // создаем модель авто с названием и параметрами
+                    NSDictionary *carModel = @{ carModelKey : currentModelName, carParametersKey : carParameters };
+                    
+                    // добавляем созданную модель в randomCarmodelsArray (доступная модели текущего магазина/бренда)
+                    [availableCarModels addObject:carModel];
+                }
+                
+                // теперь у нас заполнен массив случайных моделей для текущего бренда,
+                // можно его записать (добавить) в список всех брендов
+                NSDictionary *carShopWithAvailableModels = @{ carShopKey : carBrandName, modelsKey  : availableCarModels};
+                
+                // добавляем сформированный список (массив) моделей авто
+                [carShopsOfCurrentCity addObject:carShopWithAvailableModels];
+            }
+            
+            // достаем название города по индексу из массива и добавляем в cityDictionary
+            NSString *currentCityName = (NSString *)[cityNames objectAtIndex:cityIndex];
+            
+            // создаем dictionary, который содержит название города и список (массив) автомагазинов
+            NSDictionary *currentCityDictionary = @{ cityNameKey : currentCityName, carShopKey  : carShopsOfCurrentCity};
+            
+            // добавляем получившийся ddictionary с названием города и авто магазинами в главный список
+            [ukraineCitiesSet addObject:currentCityDictionary];
+        }
+        
+        // В конце выводим в лог содержимое
+        NSLog(@"%@", ukraineCitiesSet);
     }
     return 0;
 }
