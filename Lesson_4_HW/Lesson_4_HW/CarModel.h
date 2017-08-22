@@ -10,12 +10,16 @@
 
 @class Parameters;
 
+
+
 @interface CarModel : NSObject
 
+@property (strong, nonatomic) NSString *city;
 @property (strong, nonatomic) NSString *brand;
-@property (strong, nonatomic) NSString *modelName;
+@property (strong, nonatomic) NSString *carModel;
 @property (strong, nonatomic) Parameters *parameters;
 
 - (void)printDescription;
++ (void)searchByColor:(NSArray *)ukraineCitiesSet;
 
 @end
