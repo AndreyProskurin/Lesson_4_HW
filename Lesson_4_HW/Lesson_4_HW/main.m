@@ -16,10 +16,10 @@ int main(int argc, const char * argv[])
 {
     @autoreleasepool
     {
-        NSArray *ukraineCitiesSet = [NSArray array];
-        ukraineCitiesSet = [UkrainianCarShops generateCitiesWithShops];
+        NSArray *result = [NSArray array];
+        result = [UkrainianCarShops generateCitiesWithShops];
     
-        [CarModel searchByColor:ukraineCitiesSet];
+        [CarModel searchByColor:result];
     }
     return 0;
 }
